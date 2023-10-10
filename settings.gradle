@@ -1,0 +1,3 @@
+rootProject.name = 'e-commerce-system'
+
+include 'order-service'
