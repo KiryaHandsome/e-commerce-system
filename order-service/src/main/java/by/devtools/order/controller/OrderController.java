@@ -2,7 +2,6 @@ package by.devtools.order.controller;
 
 import by.devtools.domain.OrderDto;
 import by.devtools.order.dto.OrderCreate;
-import by.devtools.order.dto.OrderCreatedResponse;
 import by.devtools.order.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +23,8 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderCreatedResponse> processOrder(@Valid @RequestBody OrderCreate request) {
-        OrderCreatedResponse order = orderService.createOrder(request);
+    public ResponseEntity<OrderDto> processOrder(@Valid @RequestBody OrderCreate request) {
+        OrderDto order = orderService.createOrder(request);
         return ResponseEntity
                 .created(URI.create("/api/v1/orders/" + order.id()))
                 .body(order);

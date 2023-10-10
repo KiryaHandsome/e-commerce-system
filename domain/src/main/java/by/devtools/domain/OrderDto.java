@@ -5,7 +5,8 @@ public record OrderDto(
         Integer productCount,
         Integer customerId,
         Integer productId,
-        Double totalPrice
+        Double totalPrice,
+        String status
 ) {
 
 }

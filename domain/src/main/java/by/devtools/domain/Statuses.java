@@ -1,8 +1,9 @@
 package by.devtools.domain;
 
-public interface StatusEvents {
+public interface Statuses {
 
-    String PAID = "paid";
     String ACCEPTED = "accepted";
     String REJECTED = "rejected";
+    String WAITING = "waiting";
+    String CANCELLED = "cancelled";
 }
