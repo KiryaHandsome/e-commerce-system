@@ -1,5 +1,19 @@
+server:
+  port: 8080
 
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  datasource:
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/order_db
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
 

@@ -1,5 +1,5 @@
 rootProject.name = 'e-commerce-system'
 
 include 'order-service'
+include 'payment-service'
 include 'domain'
-

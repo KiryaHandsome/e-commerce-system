@@ -21,5 +21,4 @@ public class TopicConfig {
                 .partitions(1)
                 .build();
     }
-
 }

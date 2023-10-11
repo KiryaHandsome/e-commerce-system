@@ -14,6 +14,5 @@ public record OrderCreate(
         Integer productId,
         @NotNull
         Double totalPrice
-) {
-
-}
+)
+{}
