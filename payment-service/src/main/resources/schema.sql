@@ -1,0 +1,6 @@
+CREATE TABLE balances
+(
+    id          INTEGER GENERATED ALWAYS AS IDENTITY,
+    customer_id INTEGER UNIQUE   NOT NULL,
+    balance     DOUBLE PRECISION NOT NULL
+);

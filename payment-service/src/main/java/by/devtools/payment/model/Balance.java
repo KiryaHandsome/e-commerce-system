@@ -21,7 +21,7 @@ public class Balance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "customer_id", unique = true)
+    @Column(name = "customer_id")
     private Integer customerId;
     private Double balance;
 }

@@ -19,12 +19,13 @@ public class KafkaConsumer {
     @KafkaListener(topics = "order-topic", groupId = "order-group")
     public void listenOrder(String orderEvent) {
         log.info("Payment service received order from order topic <{}>", orderEvent);
-        OrderDto orderDto = JsonUtil.fromJson(orderEvent, OrderDto.class);
-        paymentService.processOrder(orderDto.customerId(), orderDto.totalPrice());
+        OrderDto order = JsonUtil.fromJson(orderEvent, OrderDto.class);
+        paymentService.processOrder(order);
     }
 
     @KafkaListener(topics = "rollback-topic", groupId = "order-group")
     public void listenRollback(String orderEvent) {
+        log.info("Payment service received rollback event for <{}>", orderEvent);
         OrderDto orderDto = JsonUtil.fromJson(orderEvent, OrderDto.class);
         paymentService.processRollback(orderDto.customerId(), orderDto.totalPrice());
     }

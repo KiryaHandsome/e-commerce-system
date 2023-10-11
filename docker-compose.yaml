@@ -44,3 +44,27 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
     ports:
       - 8080:8080
+
+  payment-db:
+    image: postgres:15-alpine
+    container_name: payment-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=payment
+    ports:
+      - 5434:5432
+
+  payment-service:
+    build:
+      context: payment-service
+      dockerfile: Dockerfile
+    container_name: payment-service
+    depends_on:
+      - payment-db
+      - kafka
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - 8081:8081

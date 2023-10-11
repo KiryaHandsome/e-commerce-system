@@ -1,10 +1,13 @@
 package by.devtools.payment.service.impl;
 
+import by.devtools.domain.OrderDto;
+import by.devtools.domain.StatusEvent;
 import by.devtools.domain.Statuses;
 import by.devtools.payment.exception.CustomerNotFoundException;
 import by.devtools.payment.model.Balance;
 import by.devtools.payment.repository.BalanceRepository;
 import by.devtools.payment.service.PaymentService;
+import by.devtools.payment.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -22,22 +25,22 @@ public class PaymentServiceImpl implements PaymentService {
      * Reserves money at user's balance.
      * Sends success/failure response to order-status-topic
      *
-     * @param customerId id of user to process balance
-     * @param totalPrice total price of order
+     * @param order order to process
      */
     @Override
-    public void processOrder(Integer customerId, Double totalPrice) {
-        Balance balance = balanceRepository.findByCustomerId(customerId)
-                .orElseThrow(() -> new CustomerNotFoundException("Customer not found. customerId = " + customerId));
+    public void processOrder(OrderDto order) {
+        Balance balance = balanceRepository.findByCustomerId(order.customerId())
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found. customerId = " + order.customerId()));
         Double currentBalance = balance.getBalance();
         String orderStatus = Statuses.ACCEPTED;
-        if (currentBalance < totalPrice) {
+        if (currentBalance < order.totalPrice()) {
             orderStatus = Statuses.REJECTED;
         } else {
-            balance.setBalance(currentBalance - totalPrice);
+            balance.setBalance(currentBalance - order.totalPrice());
             balanceRepository.save(balance);
         }
-        kafkaTemplate.send("order-status-topic", orderStatus);
+        String response = JsonUtil.toJson(new StatusEvent(order.id(), orderStatus));
+        kafkaTemplate.send("order-status-topic", response);
     }
 
     /**
