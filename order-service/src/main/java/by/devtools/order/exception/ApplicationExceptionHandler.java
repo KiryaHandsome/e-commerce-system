@@ -1,5 +1,6 @@
 package by.devtools.order.exception;
 
+import by.devtools.domain.BaseException;
 import by.devtools.order.dto.ErrorEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

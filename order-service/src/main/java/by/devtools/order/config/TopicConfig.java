@@ -21,4 +21,11 @@ public class TopicConfig {
                 .partitions(1)
                 .build();
     }
+
+    @Bean
+    public NewTopic rollbackTopic() {
+        return TopicBuilder.name("rollback-topic")
+                .partitions(1)
+                .build();
+    }
 }

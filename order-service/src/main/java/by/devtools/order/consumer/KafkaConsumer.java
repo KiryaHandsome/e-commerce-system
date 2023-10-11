@@ -34,8 +34,12 @@ public class KafkaConsumer {
             }
             case Statuses.ACCEPTED -> {
                 log.info("Processing accepted status...");
-                // if order status is NEW just update status to WAITING in current order
-                // if order status is WAITING - set status order CONFIRMED
+                if (Statuses.NEW.equals(currentOrder.getStatus())) {
+                    // if order status is NEW just update status to WAITING in current order
+                }
+                if (Statuses.WAITING.equals(currentOrder.getStatus())) {
+                    // if order status is WAITING - set status order CONFIRMED
+                }
             }
         }
     }
