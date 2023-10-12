@@ -26,7 +26,7 @@ public class OrderController {
     public ResponseEntity<OrderDto> processOrder(@Valid @RequestBody OrderCreate request) {
         OrderDto order = orderService.createOrder(request);
         return ResponseEntity
-                .created(URI.create("/api/v1/orders/" + order.id()))
+                .created(URI.create("/api/v1/orders/" + order.getId()))
                 .body(order);
     }
 
@@ -35,5 +35,4 @@ public class OrderController {
         OrderDto response = orderService.getOrder(id);
         return ResponseEntity.ok(response);
     }
-
 }

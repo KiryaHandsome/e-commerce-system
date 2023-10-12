@@ -68,3 +68,27 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
     ports:
       - 8081:8081
+
+  inventory-db:
+    image: postgres:15-alpine
+    container_name: inventory-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=inventory
+    ports:
+      - 5435:5432
+
+  inventory-service:
+    build:
+      context: inventory-service
+      dockerfile: Dockerfile
+    container_name: inventory-service
+    depends_on:
+      - inventory-db
+      - kafka
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - 8082:8082

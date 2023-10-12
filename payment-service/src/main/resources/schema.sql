@@ -1,6 +1,6 @@
-CREATE TABLE balances
+CREATE TABLE IF NOT EXISTS balances
 (
     id          INTEGER GENERATED ALWAYS AS IDENTITY,
-    customer_id INTEGER UNIQUE   NOT NULL,
-    balance     DOUBLE PRECISION NOT NULL
+    customer_id INTEGER UNIQUE NOT NULL,
+    balance     NUMERIC(10, 2) NOT NULL
 );

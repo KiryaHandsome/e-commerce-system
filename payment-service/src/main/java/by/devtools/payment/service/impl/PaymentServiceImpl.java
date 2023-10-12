@@ -1,6 +1,7 @@
 package by.devtools.payment.service.impl;
 
 import by.devtools.domain.OrderDto;
+import by.devtools.domain.PaymentEvent;
 import by.devtools.domain.StatusEvent;
 import by.devtools.domain.Statuses;
 import by.devtools.payment.exception.CustomerNotFoundException;
@@ -28,33 +29,32 @@ public class PaymentServiceImpl implements PaymentService {
      * @param order order to process
      */
     @Override
-    public void processOrder(OrderDto order) {
-        Balance balance = balanceRepository.findByCustomerId(order.customerId())
-                .orElseThrow(() -> new CustomerNotFoundException("Customer not found. customerId = " + order.customerId()));
+    public void processPayment(OrderDto order) {
+        Balance balance = balanceRepository.findByCustomerId(order.getCustomerId())
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found. customerId = " + order.getCustomerId()));
         Double currentBalance = balance.getBalance();
-        String orderStatus = Statuses.ACCEPTED;
-        if (currentBalance < order.totalPrice()) {
-            orderStatus = Statuses.REJECTED;
+        String paymentStatus = Statuses.ACCEPTED;
+        if (currentBalance < order.getTotalPrice()) {
+            paymentStatus = Statuses.REJECTED;
         } else {
-            balance.setBalance(currentBalance - order.totalPrice());
+            balance.setBalance(currentBalance - order.getTotalPrice());
             balanceRepository.save(balance);
         }
-        String response = JsonUtil.toJson(new StatusEvent(order.id(), orderStatus));
-        kafkaTemplate.send("order-status-topic", response);
+        PaymentEvent response = new PaymentEvent(order.getId(), paymentStatus);
+        kafkaTemplate.send("payment-topic", JsonUtil.toJson(response));
     }
 
     /**
      * Returns money to user's balance.
      *
-     * @param customerId user's id
-     * @param totalPrice money to return
+     * @param order order which is rollback for
      */
     @Override
-    public void processRollback(Integer customerId, Double totalPrice) {
-        Balance balance = balanceRepository.findByCustomerId(customerId)
-                .orElseThrow(() -> new CustomerNotFoundException("User not found. customerId = " + customerId));
+    public void processRollback(OrderDto order) {
+        Balance balance = balanceRepository.findByCustomerId(order.getCustomerId())
+                .orElseThrow(() -> new CustomerNotFoundException("User not found. customerId = " + order.getCustomerId()));
         Double currentBalance = balance.getBalance();
-        balance.setBalance(currentBalance + totalPrice);
+        balance.setBalance(currentBalance + order.getTotalPrice());
         balanceRepository.save(balance);
     }
 }

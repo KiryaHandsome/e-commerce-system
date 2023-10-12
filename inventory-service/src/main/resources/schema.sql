@@ -1,4 +1,4 @@
-CREATE TABLE inventories
+CREATE TABLE IF NOT EXISTS inventories
 (
     id            INTEGER GENERATED ALWAYS AS IDENTITY,
     product_id    INTEGER UNIQUE NOT NULL,

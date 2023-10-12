@@ -5,7 +5,7 @@ import by.devtools.domain.OrderDto;
 
 public interface PaymentService {
 
-    void processOrder(OrderDto order);
+    void processPayment(OrderDto order);
 
-    void processRollback(Integer customerId, Double totalPrice);
+    void processRollback(OrderDto order);
 }

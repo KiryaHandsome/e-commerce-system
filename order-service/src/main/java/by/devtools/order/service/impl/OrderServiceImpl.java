@@ -26,7 +26,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto createOrder(OrderCreate request) {
         Order order = orderMapper.createToOrder(request);
-        order.setStatus(Statuses.NEW);
+        order.setOrderStatus(Statuses.NEW);
+        order.setPaymentStatus(Statuses.NEW);
+        order.setInventoryStatus(Statuses.NEW);
         order = orderRepository.save(order);
         OrderDto orderData = orderMapper.orderToDto(order);
         kafkaTemplate.send("order-topic", JsonUtil.toJson(orderData));

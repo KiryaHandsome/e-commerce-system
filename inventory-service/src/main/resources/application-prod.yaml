@@ -2,7 +2,7 @@ spring:
   kafka:
     bootstrap-servers: kafka:9092
   datasource:
-    url: jdbc:postgresql://payment-db:5432/payment
+    url: jdbc:postgresql://inventory-db:5432/inventory
   jpa:
     show-sql: true
     hibernate:

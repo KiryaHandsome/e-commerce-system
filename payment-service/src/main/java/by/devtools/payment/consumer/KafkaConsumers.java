@@ -2,6 +2,7 @@ package by.devtools.payment.consumer;
 
 
 import by.devtools.domain.OrderDto;
+import by.devtools.domain.Statuses;
 import by.devtools.payment.service.PaymentService;
 import by.devtools.payment.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KafkaConsumer {
+public class KafkaConsumers {
 
     private final PaymentService paymentService;
 
@@ -20,13 +21,15 @@ public class KafkaConsumer {
     public void listenOrder(String orderEvent) {
         log.info("Payment service received order from order topic <{}>", orderEvent);
         OrderDto order = JsonUtil.fromJson(orderEvent, OrderDto.class);
-        paymentService.processOrder(order);
+        paymentService.processPayment(order);
     }
 
     @KafkaListener(topics = "rollback-topic", groupId = "order-group")
     public void listenRollback(String orderEvent) {
         log.info("Payment service received rollback event for <{}>", orderEvent);
-        OrderDto orderDto = JsonUtil.fromJson(orderEvent, OrderDto.class);
-        paymentService.processRollback(orderDto.customerId(), orderDto.totalPrice());
+        OrderDto order = JsonUtil.fromJson(orderEvent, OrderDto.class);
+        if (Statuses.ACCEPTED.equals(order.getPaymentStatus())) {
+            paymentService.processRollback(order);
+        }
     }
 }
