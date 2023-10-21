@@ -2,12 +2,14 @@ package by.devtools.payment.consumer;
 
 
 import by.devtools.domain.OrderDto;
+import by.devtools.domain.ResultEvent;
 import by.devtools.domain.Statuses;
 import by.devtools.payment.service.PaymentService;
 import by.devtools.payment.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -16,18 +18,20 @@ import org.springframework.stereotype.Component;
 public class KafkaConsumers {
 
     private final PaymentService paymentService;
+    private final KafkaTemplate<Integer, String> kafkaTemplate;
 
-    @KafkaListener(topics = "order-topic", groupId = "order-group")
+    @KafkaListener(topics = "order-created-topic", groupId = "payment-service")
     public void listenOrder(String orderEvent) {
-        log.info("Payment service received order from order topic <{}>", orderEvent);
+        log.info("Received order event in PaymentService: {}", orderEvent);
         OrderDto order = JsonUtil.fromJson(orderEvent, OrderDto.class);
-        paymentService.processPayment(order);
+        ResultEvent resultEvent = paymentService.processPayment(order);
+        kafkaTemplate.send("payment-result-topic", JsonUtil.toJson(resultEvent));
     }
 
-    @KafkaListener(topics = "rollback-topic", groupId = "order-group")
-    public void listenRollback(String orderEvent) {
-        log.info("Payment service received rollback event for <{}>", orderEvent);
-        OrderDto order = JsonUtil.fromJson(orderEvent, OrderDto.class);
+    @KafkaListener(topics = "rollback-topic", groupId = "payment-service")
+    public void listenRollback(String rollbackEvent) {
+        log.info("Received rollback event in PaymentService: {}", rollbackEvent);
+        OrderDto order = JsonUtil.fromJson(rollbackEvent, OrderDto.class);
         if (Statuses.ACCEPTED.equals(order.getPaymentStatus())) {
             paymentService.processRollback(order);
         }

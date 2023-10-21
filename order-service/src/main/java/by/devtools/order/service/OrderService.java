@@ -8,5 +8,7 @@ public interface OrderService {
 
     OrderDto createOrder(OrderCreate request);
 
-    OrderDto getOrder(Integer id);
+    OrderDto getOrder(int id);
+
+    void processResultEvent(int id, String eventStatus, String senderName);
 }

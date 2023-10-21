@@ -7,9 +7,9 @@ public class OrderDto {
     private Integer customerId;
     private Integer productId;
     private Double totalPrice;
-    private String orderStatus = Statuses.NEW;
-    private String paymentStatus = Statuses.NEW;
-    private String inventoryStatus = Statuses.NEW;
+    private String orderStatus;
+    private String paymentStatus;
+    private String inventoryStatus;
 
     public Integer getId() {
         return id;

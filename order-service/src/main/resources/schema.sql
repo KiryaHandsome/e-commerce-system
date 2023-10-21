@@ -1,6 +1,8 @@
-CREATE TABLE orders
+DROP TABLE IF EXISTS orders;
+
+CREATE TABLE IF NOT EXISTS orders
 (
-    id               INTEGER GENERATED ALWAYS AS IDENTITY,
+    id               INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     customer_id      INTEGER        NOT NULL,
     product_count    INTEGER        NOT NULL CHECK ( product_count > 0 ),
     product_id       INTEGER        NOT NULL,

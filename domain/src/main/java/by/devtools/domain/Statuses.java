@@ -7,8 +7,8 @@ public interface Statuses {
     String REJECTED = "rejected";
 
     // order statuses
-    String WAITING = "waiting";
     String CANCELLED = "cancelled";
     String CONFIRMED = "confirmed";
-    String NEW = "new";
+
+    String IN_PROCESS = "in process";
 }

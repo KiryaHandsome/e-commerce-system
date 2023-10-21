@@ -1,16 +1,13 @@
 package by.devtools.payment.service.impl;
 
 import by.devtools.domain.OrderDto;
-import by.devtools.domain.PaymentEvent;
-import by.devtools.domain.StatusEvent;
+import by.devtools.domain.ResultEvent;
 import by.devtools.domain.Statuses;
 import by.devtools.payment.exception.CustomerNotFoundException;
 import by.devtools.payment.model.Balance;
 import by.devtools.payment.repository.BalanceRepository;
 import by.devtools.payment.service.PaymentService;
-import by.devtools.payment.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,18 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentServiceImpl implements PaymentService {
 
     private final BalanceRepository balanceRepository;
-    private final KafkaTemplate<Integer, String> kafkaTemplate;
 
     /**
      * Reserves money at user's balance.
-     * Sends success/failure response to order-status-topic
      *
      * @param order order to process
+     * @return object with status {@link Statuses#ACCEPTED } if enough money
+     * {@link Statuses#REJECTED } otherwise
      */
     @Override
-    public void processPayment(OrderDto order) {
-        Balance balance = balanceRepository.findByCustomerId(order.getCustomerId())
-                .orElseThrow(() -> new CustomerNotFoundException("Customer not found. customerId = " + order.getCustomerId()));
+    public ResultEvent processPayment(OrderDto order) {
+        Balance balance = findBalanceByCustomerId(order.getCustomerId());
         Double currentBalance = balance.getBalance();
         String paymentStatus = Statuses.ACCEPTED;
         if (currentBalance < order.getTotalPrice()) {
@@ -40,8 +36,7 @@ public class PaymentServiceImpl implements PaymentService {
             balance.setBalance(currentBalance - order.getTotalPrice());
             balanceRepository.save(balance);
         }
-        PaymentEvent response = new PaymentEvent(order.getId(), paymentStatus);
-        kafkaTemplate.send("payment-topic", JsonUtil.toJson(response));
+        return new ResultEvent(order.getId(), paymentStatus);
     }
 
     /**
@@ -51,10 +46,16 @@ public class PaymentServiceImpl implements PaymentService {
      */
     @Override
     public void processRollback(OrderDto order) {
-        Balance balance = balanceRepository.findByCustomerId(order.getCustomerId())
-                .orElseThrow(() -> new CustomerNotFoundException("User not found. customerId = " + order.getCustomerId()));
+        Balance balance = findBalanceByCustomerId(order.getCustomerId());
         Double currentBalance = balance.getBalance();
         balance.setBalance(currentBalance + order.getTotalPrice());
         balanceRepository.save(balance);
+    }
+
+    private Balance findBalanceByCustomerId(int customerId) {
+        return balanceRepository.findByCustomerId(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException(
+                        "User not found. customerId = " + customerId)
+                );
     }
 }

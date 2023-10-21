@@ -5,9 +5,3 @@ spring:
     url: jdbc:postgresql://inventory-db:5432/inventory
   jpa:
     show-sql: true
-    hibernate:
-      ddl-auto: none
-    defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always

@@ -10,21 +10,21 @@ public class TopicConfig {
 
     @Bean
     public NewTopic orderTopic() {
-        return TopicBuilder.name("order-topic")
+        return TopicBuilder.name("order-created-topic")
                 .partitions(1)
                 .build();
     }
 
     @Bean
     public NewTopic inventoryStatus() {
-        return TopicBuilder.name("inventory-topic")
+        return TopicBuilder.name("inventory-result-topic")
                 .partitions(1)
                 .build();
     }
 
     @Bean
     public NewTopic paymentStatusTopic() {
-        return TopicBuilder.name("payment-topic")
+        return TopicBuilder.name("payment-result-topic")
                 .partitions(1)
                 .build();
     }

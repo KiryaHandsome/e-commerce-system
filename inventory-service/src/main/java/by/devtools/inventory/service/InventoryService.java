@@ -1,10 +1,11 @@
 package by.devtools.inventory.service;
 
 import by.devtools.domain.OrderDto;
+import by.devtools.domain.ResultEvent;
 
 public interface InventoryService {
 
-    void processInventory(OrderDto order);
+    ResultEvent processInventory(OrderDto order);
 
     void processRollback(OrderDto order);
 }

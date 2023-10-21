@@ -7,7 +7,6 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
   datasource:
     username: postgres
     password: postgres

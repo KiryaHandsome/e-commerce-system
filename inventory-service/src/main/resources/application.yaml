@@ -3,9 +3,7 @@ server:
 
 spring:
   kafka:
-    bootstrap-servers: localhost:29092
-    consumer:
-      group-id: order-group
+    bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -20,4 +18,4 @@ spring:
     defer-datasource-initialization: true
   sql:
     init:
-      mode: never
+      mode: always

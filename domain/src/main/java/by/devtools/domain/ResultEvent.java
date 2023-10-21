@@ -1,8 +1,8 @@
 package by.devtools.domain;
 
-public record PaymentEvent(
+public record ResultEvent(
         Integer orderId,
-        String paymentStatus
+        String status
 ) {
 
 }
