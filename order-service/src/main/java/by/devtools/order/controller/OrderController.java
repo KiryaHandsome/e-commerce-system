@@ -26,7 +26,7 @@ public class OrderController {
     private final KafkaTemplate<Integer, String> kafkaTemplate;
 
     @PostMapping
-    public ResponseEntity<OrderDto> processOrder(@Valid @RequestBody OrderCreate request) {
+    public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody OrderCreate request) {
         OrderDto order = orderService.createOrder(request);
         kafkaTemplate.send("order-created-topic", JsonUtil.toJson(order));
         return ResponseEntity
@@ -35,7 +35,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDto> processOrder(@PathVariable Integer id) {
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable Integer id) {
         OrderDto response = orderService.getOrder(id);
         return ResponseEntity.ok(response);
     }

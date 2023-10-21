@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE IF NOT EXISTS orders
 (
@@ -10,4 +11,11 @@ CREATE TABLE IF NOT EXISTS orders
     payment_status   VARCHAR        NOT NULL,
     inventory_status VARCHAR        NOT NULL,
     order_status     VARCHAR        NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS users
+(
+    id       INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
 );

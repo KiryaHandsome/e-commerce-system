@@ -20,3 +20,8 @@ spring:
     init:
       mode: always
 
+secret:
+  key: hmjBzVJJ9epCnV7sYaL2hgrgsCMluQIO8osh/zThBl3iOAf0jfwdDU5dxFGfEgfd
+  issuer: devtools
+  expiration: 1800000 # 30 minutes
+
