@@ -1,5 +1,7 @@
 package by.devtools.domain;
 
+import java.util.Objects;
+
 public class OrderDto {
 
     private Integer id;
@@ -10,6 +12,20 @@ public class OrderDto {
     private String orderStatus;
     private String paymentStatus;
     private String inventoryStatus;
+
+    public OrderDto() {
+    }
+
+    public OrderDto(Integer id, Integer productCount, Integer customerId, Integer productId, Double totalPrice, String orderStatus, String paymentStatus, String inventoryStatus) {
+        this.id = id;
+        this.productCount = productCount;
+        this.customerId = customerId;
+        this.productId = productId;
+        this.totalPrice = totalPrice;
+        this.orderStatus = orderStatus;
+        this.paymentStatus = paymentStatus;
+        this.inventoryStatus = inventoryStatus;
+    }
 
     public Integer getId() {
         return id;
@@ -73,5 +89,25 @@ public class OrderDto {
 
     public void setInventoryStatus(String inventoryStatus) {
         this.inventoryStatus = inventoryStatus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderDto orderDto = (OrderDto) o;
+        return Objects.equals(id, orderDto.id) &&
+                Objects.equals(productCount, orderDto.productCount) &&
+                Objects.equals(customerId, orderDto.customerId) &&
+                Objects.equals(productId, orderDto.productId) &&
+                Objects.equals(totalPrice, orderDto.totalPrice) &&
+                Objects.equals(orderStatus, orderDto.orderStatus) &&
+                Objects.equals(paymentStatus, orderDto.paymentStatus) &&
+                Objects.equals(inventoryStatus, orderDto.inventoryStatus);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, productCount, customerId, productId, totalPrice, orderStatus, paymentStatus, inventoryStatus);
     }
 }

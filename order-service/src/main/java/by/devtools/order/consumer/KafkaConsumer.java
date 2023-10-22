@@ -3,6 +3,7 @@ package by.devtools.order.consumer;
 import by.devtools.domain.ResultEvent;
 import by.devtools.order.service.OrderService;
 import by.devtools.order.util.JsonUtil;
+import by.devtools.order.util.ServiceNames;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -22,7 +23,7 @@ public class KafkaConsumer {
         orderService.processResultEvent(
                 inventoryEvent.orderId(),
                 inventoryEvent.status(),
-                "inventory"
+                ServiceNames.INVENTORY
         );
     }
 
@@ -33,7 +34,7 @@ public class KafkaConsumer {
         orderService.processResultEvent(
                 inventoryEvent.orderId(),
                 inventoryEvent.status(),
-                "payment"
+                ServiceNames.PAYMENT
         );
     }
 }

@@ -9,6 +9,7 @@ import by.devtools.order.model.Order;
 import by.devtools.order.repository.OrderRepository;
 import by.devtools.order.service.OrderService;
 import by.devtools.order.util.JsonUtil;
+import by.devtools.order.util.ServiceNames;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.retry.annotation.Retryable;
@@ -76,9 +77,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void updateServiceStatusByName(String senderName, Order order, String newStatus) {
-        if ("inventory".equals(senderName)) {
+        if (ServiceNames.INVENTORY.equals(senderName)) {
             order.setInventoryStatus(newStatus);
-        } else if ("payment".equals(senderName)) {
+        } else if (ServiceNames.PAYMENT.equals(senderName)) {
             order.setPaymentStatus(newStatus);
         }
     }

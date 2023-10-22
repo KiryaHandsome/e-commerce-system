@@ -5,23 +5,33 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
 
+@Slf4j
 @Service
 public class JwtService implements TokenService {
 
     @Value("${secret.key}")
-    private String secretKey;
+    private final String secretKey;
 
     @Value("${secret.issuer}")
-    private String issuer;
+    private final String issuer;
 
     @Value("${secret.expiration}")
-    private long expirationTime;
+    private final long expirationTime;
+
+    public JwtService(@Value("${secret.key}") String secretKey,
+                      @Value("${secret.issuer}") String issuer,
+                      @Value("${secret.expiration}") long expirationTime) {
+        this.secretKey = secretKey;
+        this.issuer = issuer;
+        this.expirationTime = expirationTime;
+    }
 
     @Override
     public String generateToken(String username) {
@@ -37,7 +47,14 @@ public class JwtService implements TokenService {
 
     @Override
     public boolean validateToken(String token) {
-        Date expirationDate = extractClaims(token).getExpiration();
+        Claims claims;
+        try {
+            claims = extractClaims(token);
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            return false;
+        }
+        Date expirationDate = claims.getExpiration();
         Date now = new Date(System.currentTimeMillis());
         return expirationDate.after(now);
     }
@@ -47,12 +64,12 @@ public class JwtService implements TokenService {
         return extractClaims(token).getSubject();
     }
 
-    private Key getSignInKey() {
+    protected Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private Claims extractClaims(String token) {
+    protected Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()
