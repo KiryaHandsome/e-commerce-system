@@ -8,7 +8,6 @@ import by.devtools.order.mapper.OrderMapper;
 import by.devtools.order.model.Order;
 import by.devtools.order.repository.OrderRepository;
 import by.devtools.order.service.OrderService;
-import by.devtools.order.util.JsonUtil;
 import by.devtools.order.util.ServiceNames;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -23,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderMapper orderMapper;
+    private final KafkaProducer kafkaProducer;
     private final KafkaTemplate<Integer, String> kafkaTemplate;
     private final OrderRepository orderRepository;
 
@@ -91,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void sendRollback(Order order) {
         OrderDto orderDto = orderMapper.orderToDto(order);
-        kafkaTemplate.send("rollback-topic", JsonUtil.toJson(orderDto));
+        kafkaProducer.sendMessage("rollback-topic", orderDto);
     }
 
     /**

@@ -16,7 +16,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.Optional;
 
@@ -34,7 +33,7 @@ class OrderServiceImplTest {
     private OrderMapper orderMapper;
 
     @Mock
-    private KafkaTemplate<Integer, String> kafkaTemplate;
+    private KafkaProducer kafkaProducer;
 
     @Mock
     private OrderRepository orderRepository;
@@ -257,7 +256,7 @@ class OrderServiceImplTest {
 
         verify(orderRepository).findById(TestData.ID);
         verify(orderRepository).save(orderCapture.capture());
-        verify(kafkaTemplate).send(eq("rollback-topic"), any());
+        verify(kafkaProducer).sendMessage(eq("rollback-topic"), any());
 
         assertThat(orderCapture.getValue()).isEqualTo(expectedOrderToSave);
     }
@@ -283,7 +282,7 @@ class OrderServiceImplTest {
 
         verify(orderRepository).findById(TestData.ID);
         verify(orderRepository).save(orderCapture.capture());
-        verify(kafkaTemplate).send(eq("rollback-topic"), any());
+        verify(kafkaProducer).sendMessage(eq("rollback-topic"), any());
 
         assertThat(orderCapture.getValue()).isEqualTo(expectedOrderToSave);
     }
