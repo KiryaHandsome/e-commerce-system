@@ -17,13 +17,14 @@ public class KafkaProducer {
     private final KafkaTemplate<Integer, String> kafkaTemplate;
 
     public <T> void sendMessage(String topic, T payload) {
-        CompletableFuture<SendResult<Integer, String>> future = kafkaTemplate.send(topic, JsonUtil.toJson(payload));
+        String message = JsonUtil.toJson(payload);
+        CompletableFuture<SendResult<Integer, String>> future = kafkaTemplate.send(topic, message);
         future.whenComplete((result, ex) -> {
             if (ex == null) {
-                log.info("Successfully sent message={} to topic={}", payload, topic);
+                log.info("Successfully sent message={} to topic={}", message, topic);
             } else {
                 log.warn("Error occurred when sending message={} to topic={}. Exception message: {} ",
-                        payload, topic, ex.getMessage());
+                        message, topic, ex.getMessage());
             }
         });
     }

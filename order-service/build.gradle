@@ -50,6 +50,7 @@ dependencies {
 	testImplementation 'org.testcontainers:kafka'
 	testImplementation 'org.testcontainers:postgresql'
 	testImplementation "org.awaitility:awaitility:${awaitilityVersion}"
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {

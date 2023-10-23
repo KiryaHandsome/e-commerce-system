@@ -16,12 +16,12 @@ public class BaseIntegrationTest {
     public static final String KAFKA_IMAGE_NAME = "confluentinc/cp-kafka:7.5.1";
 
     @Container
-    static final PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>(
+    protected static final PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>(
             DockerImageName.parse(POSTGRES_IMAGE_NAME)
     );
 
     @Container
-    static final KafkaContainer kafkaContainer = new KafkaContainer(
+    protected static final KafkaContainer kafkaContainer = new KafkaContainer(
             DockerImageName.parse(KAFKA_IMAGE_NAME)
     );
 

@@ -3,6 +3,7 @@ package by.devtools.order.controller;
 import by.devtools.domain.OrderDto;
 import by.devtools.order.dto.OrderCreate;
 import by.devtools.order.service.OrderService;
+import by.devtools.order.service.impl.KafkaProducer;
 import by.devtools.order.util.JsonUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,12 @@ import java.net.URI;
 public class OrderController {
 
     private final OrderService orderService;
-    private final KafkaTemplate<Integer, String> kafkaTemplate;
+    private final KafkaProducer kafkaProducer;
 
     @PostMapping
     public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody OrderCreate request) {
         OrderDto order = orderService.createOrder(request);
-        kafkaTemplate.send("order-created-topic", JsonUtil.toJson(order));
+        kafkaProducer.sendMessage("order-created-topic", order);
         return ResponseEntity
                 .created(URI.create("/api/v1/orders/" + order.getId()))
                 .body(order);
