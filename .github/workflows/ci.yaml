@@ -19,5 +19,5 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Run build(it includes task `test`) with Gradle Wrapper
-        run: ./gradlew build --console=plain
+      - name: Run build(including task `test`) with Gradle Wrapper
+        run: ./gradlew build
