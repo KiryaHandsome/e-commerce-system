@@ -5,6 +5,7 @@ import by.devtools.domain.OrderDto;
 import by.devtools.domain.ResultEvent;
 import by.devtools.domain.Statuses;
 import by.devtools.payment.service.PaymentService;
+import by.devtools.payment.service.impl.KafkaProducer;
 import by.devtools.payment.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 public class KafkaConsumers {
 
     private final PaymentService paymentService;
+    private final KafkaProducer kafkaProducer;
     private final KafkaTemplate<Integer, String> kafkaTemplate;
 
     @KafkaListener(topics = "order-created-topic", groupId = "payment-service")
@@ -25,7 +27,7 @@ public class KafkaConsumers {
         log.info("Received order event in PaymentService: {}", orderEvent);
         OrderDto order = JsonUtil.fromJson(orderEvent, OrderDto.class);
         ResultEvent resultEvent = paymentService.processPayment(order);
-        kafkaTemplate.send("payment-result-topic", JsonUtil.toJson(resultEvent));
+        kafkaProducer.sendMessage("payment-result-topic", resultEvent);
     }
 
     @KafkaListener(topics = "rollback-topic", groupId = "payment-service")

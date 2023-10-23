@@ -23,7 +23,7 @@ import static org.awaitility.Awaitility.await;
 
 @DirtiesContext
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class KafkaConsumerIT extends BaseIntegrationTest {
+class KafkaConsumersIT extends BaseIntegrationTest {
 
 
     @Autowired
