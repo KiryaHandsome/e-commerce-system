@@ -1,9 +1,7 @@
 package by.devtools.order.integration.service;
 
 import by.devtools.domain.OrderDto;
-import by.devtools.domain.Statuses;
 import by.devtools.order.integration.BaseIntegrationTest;
-import by.devtools.order.model.Order;
 import by.devtools.order.service.impl.KafkaProducer;
 import by.devtools.order.util.JsonUtil;
 import by.devtools.order.util.TestData;
@@ -12,7 +10,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,23 +21,20 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @DirtiesContext
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class KafkaProducerTest extends BaseIntegrationTest {
 
-    @Autowired
-    private KafkaProducer kafkaProducer;
-
     private static final String TOPIC_NAME = "order-created-topic";
     private static KafkaConsumer<Integer, String> consumer;
+    @Autowired
+    private KafkaProducer kafkaProducer;
 
     @BeforeAll
     static void setUp() {

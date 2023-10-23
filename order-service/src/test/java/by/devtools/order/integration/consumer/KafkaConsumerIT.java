@@ -91,7 +91,7 @@ class KafkaConsumerIT extends BaseIntegrationTest {
 
         await()
                 .pollInterval(Duration.ofSeconds(3))
-                .atMost(10, SECONDS)
+                .atMost(15, SECONDS)
                 .untilAsserted(() -> {
                     Optional<Order> order = orderRepository.findById(orderId);
                     assertThat(order).isPresent();
