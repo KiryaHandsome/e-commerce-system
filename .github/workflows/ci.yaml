@@ -20,4 +20,4 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Run build(it includes task `test`) with Gradle Wrapper
-        run: ./gradlew build
+        run: ./gradlew build --console=plain
