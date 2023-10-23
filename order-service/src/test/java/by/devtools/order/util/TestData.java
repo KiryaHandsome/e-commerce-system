@@ -1,6 +1,7 @@
 package by.devtools.order.util;
 
 import by.devtools.domain.OrderDto;
+import by.devtools.domain.ResultEvent;
 import by.devtools.domain.Statuses;
 import by.devtools.order.dto.LoginRequest;
 import by.devtools.order.dto.OrderCreate;

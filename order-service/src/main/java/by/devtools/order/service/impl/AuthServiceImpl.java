@@ -8,7 +8,6 @@ import by.devtools.order.model.User;
 import by.devtools.order.repository.UserRepository;
 import by.devtools.order.service.AuthService;
 import by.devtools.order.service.TokenService;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
