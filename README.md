@@ -1,7 +1,7 @@
 # E-commerce ordering system
 
 [![Build and Test](https://github.com/KiryaHandsome/e-commerce-system/actions/workflows/ci.yaml/badge.svg)](https://github.com/KiryaHandsome/e-commerce-system/actions/workflows/ci.yaml)
-
+[![CodeFactor](https://www.codefactor.io/repository/github/kiryahandsome/e-commerce-system/badge)](https://www.codefactor.io/repository/github/kiryahandsome/e-commerce-system)
 
 ## Services
 
