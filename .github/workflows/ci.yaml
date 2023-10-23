@@ -1,4 +1,4 @@
-name: Build and Test e-commerce-system
+name: Build and Test
 
 on:
   push:

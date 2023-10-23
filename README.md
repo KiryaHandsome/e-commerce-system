@@ -1,5 +1,8 @@
 # E-commerce ordering system
 
+[![Build and Test](https://github.com/KiryaHandsome/e-commerce-system/actions/workflows/ci.yaml/badge.svg)](https://github.com/KiryaHandsome/e-commerce-system/actions/workflows/ci.yaml)
+
+
 ## Services
 
 1. **Order service**: service exposes REST api for ordering goods
