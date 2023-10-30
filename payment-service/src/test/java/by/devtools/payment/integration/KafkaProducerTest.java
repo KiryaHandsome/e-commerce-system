@@ -1,10 +1,8 @@
-package by.devtools.order.integration.service;
+package by.devtools.payment.integration;
 
 import by.devtools.domain.OrderDto;
-import by.devtools.order.integration.BaseIntegrationTest;
-import by.devtools.order.service.impl.KafkaProducer;
-import by.devtools.order.util.JsonUtil;
-import by.devtools.order.util.TestData;
+import by.devtools.payment.service.impl.KafkaProducer;
+import by.devtools.payment.util.JsonUtil;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -31,7 +29,7 @@ import static org.awaitility.Awaitility.await;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class KafkaProducerTest extends BaseIntegrationTest {
 
-    private static final String TOPIC_NAME = "order-created-topic";
+    private static final String TOPIC_NAME = "payment-result-topic";
     private static KafkaConsumer<Integer, String> consumer;
 
     @Autowired
@@ -56,7 +54,7 @@ class KafkaProducerTest extends BaseIntegrationTest {
 
     @Test
     void check_sendMessage_should_deliverMessageToTopic() {
-        var message = TestData.getOrderDto();
+        var message = new OrderDto(1, 1, 1, 1, 1.10, "", "", "");
 
         kafkaProducer.sendMessage(TOPIC_NAME, message);
 
