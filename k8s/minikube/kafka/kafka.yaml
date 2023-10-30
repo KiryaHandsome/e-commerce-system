@@ -1,7 +1,9 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: kafka-broker
+  name: kafka-deployment
+  labels:
+    app: kafka
 spec:
   replicas: 1
   selector:
@@ -13,10 +15,22 @@ spec:
         app: kafka
     spec:
       containers:
-        - name: kafka
+        - name: broker
           image: confluentinc/cp-kafka:7.5.1
           ports:
             - containerPort: 9092
           envFrom:
             - configMapRef:
                 name: kafka-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-service
+spec:
+  selector:
+    app: kafka
+  ports:
+    - protocol: TCP
+      port: 9092
+      targetPort: 9092

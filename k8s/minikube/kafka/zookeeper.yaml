@@ -1,7 +1,9 @@
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: zookeeper
+  name: zookeeper-deployment
+  labels:
+    app: zookeeper
 spec:
   replicas: 1
   selector:
@@ -20,3 +22,15 @@ spec:
           envFrom:
             - configMapRef:
                 name: zookeeper-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper
+spec:
+  selector:
+    app: zookeeper
+  ports:
+    - protocol: TCP
+      port: 2181
+      targetPort: 2181

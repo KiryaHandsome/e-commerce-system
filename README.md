@@ -25,7 +25,13 @@ Access to the API is secured using Spring Security. Users need to authenticate t
 
 ### Order Service
 
-- **POST /api/v1/auth/login** - Authenticates a user.
+- **POST /api/v1/auth/login** - Authenticates a user. Default user credentials:
+```json
+{
+    "username": "username",
+    "password": "password"
+}
+```
 
 - **POST /api/v1/orders** - Creates an order. Request body format:
   ```json
@@ -58,6 +64,30 @@ Unit and integration tests have been implemented to ensure the reliability and c
 ## Deployment
 
 The services, Kafka, and the database are deployed in a local Kubernetes cluster using Minikube. This deployment demonstrates a local containerized environment.
+
+## Getting started
+
+### Prerequisites
+You must have **minikube**, **kubectl**, **gradle** and **docker** installed on your computer.
+
+### Steps
+1. Clone project and go to root folder 
+2. Run minikube 
+```
+minikube start
+```
+3. Deploy all infrastructure in kubernetes
+```
+kubectl apply -f k8s/minikube/ --recursive
+```
+4. Route LoadBalancer service to be able to connect to it locally
+```
+minikube tunnel
+```
+5. Check external-ip exposed to service `order` deployment and use it as host
+```
+kubectl get svc
+```
 
 ## Tech Stack
 
