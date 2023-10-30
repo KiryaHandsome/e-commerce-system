@@ -29,7 +29,7 @@ import static org.awaitility.Awaitility.await;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class KafkaProducerTest extends BaseIntegrationTest {
 
-    private static final String TOPIC_NAME = "payment-result-topic";
+    private static final String TOPIC_NAME = "inventory-result-topic";
     private static KafkaConsumer<Integer, String> consumer;
 
     @Autowired
