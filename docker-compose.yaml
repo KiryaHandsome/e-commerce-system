@@ -33,9 +33,7 @@ services:
       - 5433:5432
 
   order-service:
-    build:
-      context: order-service
-      dockerfile: Dockerfile
+    image: kiryahandsome/order-service
     container_name: order-service
     depends_on:
       - order-db
@@ -57,9 +55,7 @@ services:
       - 5434:5432
 
   payment-service:
-    build:
-      context: payment-service
-      dockerfile: Dockerfile
+    image: kiryahandsome/payment-service
     container_name: payment-service
     depends_on:
       - payment-db
@@ -81,9 +77,7 @@ services:
       - 5435:5432
 
   inventory-service:
-    build:
-      context: inventory-service
-      dockerfile: Dockerfile
+    image: kiryahandsome/inventory-service
     container_name: inventory-service
     depends_on:
       - inventory-db

@@ -20,7 +20,6 @@ public class KafkaConsumers {
 
     private final PaymentService paymentService;
     private final KafkaProducer kafkaProducer;
-    private final KafkaTemplate<Integer, String> kafkaTemplate;
 
     @KafkaListener(topics = "order-created-topic", groupId = "payment-service")
     public void listenOrder(String orderEvent) {

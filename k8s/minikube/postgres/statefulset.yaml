@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: inventory-db
+  labels:
+    app: inventory-db
+spec:
+  serviceName: inventory-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-db
+  template:
+    metadata:
+      name: inventory-db
+      labels:
+        app: inventory-db
+    spec:
+      volumes:
+        - name: inventory-db
+          persistentVolumeClaim:
+            claimName: inventory-db-pvc
+      containers:
+        - name: inventory-db
+          image: postgres:15-alpine
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /var/lib/postgresql
+              name: inventory-db
+          envFrom:
+            - configMapRef:
+                name: inventory-db-config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: order-db
+  labels:
+    app: order-db
+spec:
+  serviceName: order-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-db
+  template:
+    metadata:
+      name: order-db
+      labels:
+        app: order-db
+    spec:
+      volumes:
+        - name: order-db
+          persistentVolumeClaim:
+            claimName: order-db-pvc
+      containers:
+        - name: order-db
+          image: postgres:15-alpine
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /var/lib/postgresql
+              name: order-db
+          envFrom:
+            - configMapRef:
+                name: order-db-config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: payment-db
+  labels:
+    app: payment-db
+spec:
+  serviceName: payment-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-db
+  template:
+    metadata:
+      name: payment-db
+      labels:
+        app: payment-db
+    spec:
+      volumes:
+        - name: payment-db
+          persistentVolumeClaim:
+            claimName: payment-db-pvc
+      containers:
+        - name: payment-db
+          image: postgres:15-alpine
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /var/lib/postgresql
+              name: payment-db
+          envFrom:
+            - configMapRef:
+                name: payment-db-config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      restartPolicy: Always
